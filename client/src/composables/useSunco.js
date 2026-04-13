@@ -98,6 +98,12 @@ export const useInitSunco = () => {
     // const conversation = Smooch.getDisplayedConversation();
     // toggleFooter(conversation.metadata.showInput);
     useAddOnclickListener();
+
+    // Hide widget container by default
+    const container = document.getElementById('web-messenger-container');
+    if (container) {
+      container.style.display = 'none';
+    }
     // if (
     //   Smooch.getConversations().length === 0 ||
     //   !Smooch.getConversations().find(
@@ -224,7 +230,9 @@ const useFetchSunCoUser = async userId => {
     errorMessage.value = error.message;
     console.error(error);
   }
-  isLoading.value = false;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 800);
 };
 
 const useFetchUserIdentity = async email => {
@@ -245,12 +253,16 @@ const useFetchUserIdentity = async email => {
     );
     useShowWarningToast(error);
   }
-  isLoading.value = false;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 800);
 };
 
-const useFetchIntegrations = async () => {
+const useFetchIntegrations = async isLoadingFlag => {
   try {
-    isLoading.value = true;
+    if (isLoadingFlag) {
+      isLoading.value = true;
+    }
     const response = await fetch('/integrations');
     const data = await response.json();
     if (data.error) {
@@ -260,7 +272,9 @@ const useFetchIntegrations = async () => {
   } catch (error) {
     useShowWarningToast(error.message);
   }
-  isLoading.value = false;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 800);
 };
 
 const useUpdateIntegration = async (
@@ -270,7 +284,6 @@ const useUpdateIntegration = async (
   defaultResponderId,
 ) => {
   try {
-    isLoading.value = true;
     const response = await fetch(`/integrations/${integrationId}`, {
       method: 'PATCH',
       headers: {
@@ -284,12 +297,11 @@ const useUpdateIntegration = async (
     });
     await response.json();
     useShowSuccessToast(`Integration ${integrationId} updated`);
-    await useFetchIntegrations();
+    await useFetchIntegrations(false);
   } catch (error) {
     console.error('An error occurred while updating the integration:', error);
     useShowWarningToast(error);
   }
-  isLoading.value = false;
 };
 
 const useUpdateSwitchboard = async (
@@ -380,7 +392,9 @@ const useFetchSwitchboardIntegrations = async () => {
   } catch (error) {
     useShowWarningToast(error.message);
   }
-  isLoading.value = false;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 800);
 };
 
 const useCreateSwitchboardIntegration = async (
@@ -443,7 +457,9 @@ const useDeleteConversations = async userId => {
     useShowSuccessToast(message);
     setTimeout(() => {
       useFetchConversations(userId);
-      isLoading.value = false;
+      setTimeout(() => {
+        isLoading.value = false;
+      }, 800);
     }, 2000);
   } catch (error) {
     useShowWarningToast(error.message);

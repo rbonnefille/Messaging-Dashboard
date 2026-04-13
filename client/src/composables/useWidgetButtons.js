@@ -13,18 +13,20 @@ const { changeAuthenticationStatus, loginWidgets } = userStore;
 const metadataSet = ref(false);
 const customerMetadataSet = ref(false);
 const htmlTag = document.querySelector('html');
-const sidebarRef = ref(null);
+const sidebarLeft = ref(null);
+const sidebarRight = ref(null);
 const isWidgetEmbedded = ref(false);
+const isSuncoWidgetVisible = ref(false);
 
-const openSidebar = () => {
-  sidebarRef.value?.openSidebar();
+const openSidebar = location => {
+  location.value?.openSidebar();
 };
 
-const updateWidgetLocale = (locale) => {
+const updateWidgetLocale = locale => {
   window.zE('messenger:set', 'locale', `${locale}`);
 };
 
-const updateCookieConsent = (range) => {
+const updateCookieConsent = range => {
   zE('messenger:set', 'cookies', `${range}`);
 };
 
@@ -92,6 +94,14 @@ const changeColors = () => {
 const { token: sessionToken, external_id: sessionExternalId } =
   useGetSessionAuth();
 
+const toggleSuncoWidget = () => {
+  isSuncoWidgetVisible.value = !isSuncoWidgetVisible.value;
+  const container = document.getElementById('web-messenger-container');
+  if (container) {
+    container.style.display = isSuncoWidgetVisible.value ? 'block' : 'none';
+  }
+};
+
 const toolsButtons = {
   clearStorage: {
     text: 'Clear Storage',
@@ -102,6 +112,13 @@ const toolsButtons = {
   },
 };
 const suncoButtons = {
+  toggleWidget: {
+    text: 'Show Widget',
+    type: 'button',
+    click() {
+      toggleSuncoWidget();
+    },
+  },
   openSunCo: {
     text: 'Open',
     type: 'button',
@@ -125,7 +142,7 @@ const suncoButtons = {
       } else {
         useShowWarningToast(
           `No JWT in sessionStorage. Please login via the form`,
-          1500
+          1500,
         );
       }
     },
@@ -149,7 +166,7 @@ const suncoButtons = {
           type: 'image',
           mediaUrl: useGetRandomImageUrl(),
         },
-        Smooch.getDisplayedConversation().id
+        Smooch.getDisplayedConversation().id,
       );
     },
   },
@@ -159,7 +176,7 @@ const suncoButtons = {
     click() {
       window.open(
         'https://github.com/zendesk/sunshine-conversations-web',
-        '_blank'
+        '_blank',
       );
     },
   },
@@ -229,10 +246,10 @@ const zendeskButtons = {
     },
   },
   embeddedMode: {
-    text: 'Embedded Mode',
+    text: 'Embedded Mode Sidebar',
     type: 'button',
     click() {
-      openSidebar();
+      openSidebar(sidebarRight);
       if (!isWidgetEmbedded.value) {
         isWidgetEmbedded.value = true;
         window.zE('messenger', 'render', {
@@ -246,7 +263,24 @@ const zendeskButtons = {
     text: 'Open sidebar',
     type: 'button',
     click() {
-      openSidebar();
+      openSidebar(sidebarRight);
+    },
+  },
+  createConversation: {
+    text: 'Create Conversation',
+    type: 'button',
+    click() {
+      window.zE('messenger', 'open');
+      window.zE('messenger:ui', 'newConversation', {
+        displayName: 'Support Request',
+        iconUrl:
+          'https://upload.wikimedia.org/wikipedia/fr/6/6d/Looney_Tunes_Logo.png',
+        metadata: {
+          priority: 'high',
+          'zen:ticket:tags': 'newConversation, important, supportRequest',
+          'zen:ticket_field:17826865089553': 'test',
+        },
+      });
     },
   },
   showMessaging: {
@@ -272,7 +306,7 @@ const zendeskButtons = {
       } else {
         useShowWarningToast(
           `No JWT in sessionStorage. Please login via the form`,
-          1500
+          1500,
         );
       }
     },
@@ -291,10 +325,15 @@ const zendeskButtons = {
   setMetadata: {
     text: 'Set Metadata',
     type: 'button',
-    code: `window.zE('messenger:set', 'conversationFields', [{ id: 17826865089553, value: 'test'}])\n\nwindow.zE("messenger:set", "conversationTags", ["sales","computer_accessories",]);`,
+    code: `window.zE('messenger:set', 'conversationFields', [{ id: 17826865089553, value: 'test'}, { id: 44803962172689, value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFwcF82MDY0MzU2ODA4OWRlYzAwZDJjMzZhNDMifQ.eyJzY29wZSI6InVzZXIiLCJleHRlcm5hbF9pZCI6InRlc3QiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTc3MzY0OTA3OCwiZXhwIjoxNzc0MjUzODc4fQ.sav-L5-PrrddBaq24yArzFoep9Ca5Y5yXsOkltLV9vI'}])\n\nwindow.zE("messenger:set", "conversationTags", ["sales","computer_accessories",]);`,
     click() {
       window.zE('messenger:set', 'conversationFields', [
         { id: 17826865089553, value: 'test' },
+        {
+          id: 44803962172689,
+          value:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFwcF82MDY0MzU2ODA4OWRlYzAwZDJjMzZhNDMifQ.eyJzY29wZSI6InVzZXIiLCJleHRlcm5hbF9pZCI6InRlc3QiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTc3MzY0OTA3OCwiZXhwIjoxNzc0MjUzODc4fQ.sav-L5-PrrddBaq24yArzFoep9Ca5Y5yXsOkltLV9vI',
+        },
       ]);
       window.zE('messenger:set', 'conversationTags', [
         'sales',
@@ -330,7 +369,7 @@ const zendeskButtons = {
       window.zE(
         'messenger:open',
         'voice',
-        import.meta.env.VITE_ZENDESK_VOICE_LINE_ID
+        import.meta.env.VITE_ZENDESK_VOICE_LINE_ID,
       );
     },
   },
@@ -363,7 +402,7 @@ const zendeskButtons = {
     click() {
       window.open(
         'https://developer.zendesk.com/api-reference/widget-messaging/web/core/',
-        '_blank'
+        '_blank',
       );
     },
   },
@@ -373,9 +412,14 @@ export {
   toolsButtons,
   suncoButtons,
   zendeskButtons,
-  sidebarRef,
+  sidebarLeft,
+  sidebarRight,
+  openSidebar,
+  isWidgetEmbedded,
   updateWidgetLocale,
   updateCookieConsent,
   metadataSet,
   customerMetadataSet,
+  isSuncoWidgetVisible,
+  toggleSuncoWidget,
 };

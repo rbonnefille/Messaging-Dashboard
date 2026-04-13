@@ -21,17 +21,18 @@
         @click="sendNotification"
         :disabled="isFormInvalid"
         :class="{ disabled: !phoneNumber || !message }" />
-      <PulseLoader
-        :loading="isLoading"
-        color="#D1F470"
-        size="10px"></PulseLoader>
+      <div
+        class="spinner-border text-success text-bold"
+        role="status"
+        v-if="isLoading">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
   import { ref, computed } from 'vue';
-  import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
   import VInput from '@/components/VInput.vue';
   import VLabel from '@/components/VLabel.vue';
   import VButton from '@/components/VButton.vue';

@@ -7,6 +7,7 @@
     <VInput
       id="searchUser"
       v-model="searchUser"
+      ref="userIdOrExternalId"
       name="Search User"
       class="mx-3"
       placeholder="user id or external id"
@@ -23,15 +24,25 @@
   import VInput from '@/components/VInput.vue';
   import VLabel from '@/components/VLabel.vue';
   import VButton from '@/components/VButton.vue';
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
 
   const router = useRouter();
-  const searchUser = ref('');
+  const searchUser = ref(null);
+  const userIdOrExternalId = ref(null);
+
+  const focusInput = () => {
+    if (userIdOrExternalId.value) {
+      userIdOrExternalId.value.focus();
+    }
+  };
 
   const searchUserSunCo = async (e = undefined) => {
     const userId = searchUser.value || e.target.value;
     router.push({ name: 'SunCo User', params: { id: userId } });
   };
+  onMounted(() => {
+    focusInput();
+  });
 </script>
 
 <route lang="json">

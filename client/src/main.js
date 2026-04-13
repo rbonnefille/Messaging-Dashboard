@@ -7,9 +7,18 @@ import router from '@/router';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import '@/assets/css/custom-styles.scss';
-import { useFavicon, usePreferredDark } from '@vueuse/core';
+import { useFavicon, usePreferredDark, useColorMode } from '@vueuse/core';
+import { createHead } from '@unhead/vue/client';
+
+const head = createHead();
 
 const isDark = usePreferredDark();
+
+const mode = useColorMode();
+//force light mode
+if (mode.value === 'dark') {
+  mode.value = 'light';
+}
 
 const favicon = computed(() =>
   isDark.value ? '/whiteFavicon.png' : '/darkFavicon.png',
@@ -25,6 +34,7 @@ const options = {
   newestOnTop: true,
 };
 
+app.use(head);
 app.use(Toast, options);
 app.use(pinia);
 app.use(router);

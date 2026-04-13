@@ -128,6 +128,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    'Widget Embedded mode': RouteRecordInfo<
+      'Widget Embedded mode',
+      '/zendesk/embedded',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
   }
 
   /**
@@ -228,6 +235,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/zendesk/index.vue': {
       routes:
         | 'Zendesk Tools'
+      views:
+        | never
+    }
+    'src/pages/zendesk/embedded.vue': {
+      routes:
+        | 'Widget Embedded mode'
       views:
         | never
     }

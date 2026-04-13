@@ -1,6 +1,7 @@
 <template>
   <div class="d-flex">
     <input
+      ref="inputElement"
       :value="modelValue"
       :id="id"
       :name="name"
@@ -16,7 +17,9 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
+
+  const inputElement = ref(null);
 
   defineEmits(['update:modelValue']);
 
@@ -64,4 +67,10 @@
       ? 'form-check-input'
       : `form-control ${props.className}`;
   });
+
+  const focus = () => {
+    inputElement.value?.focus();
+  };
+
+  defineExpose({ focus });
 </script>

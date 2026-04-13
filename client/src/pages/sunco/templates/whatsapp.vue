@@ -4,10 +4,12 @@
       <VError class="mt-2" :errorMessage="errorMessage" />
     </div>
     <div v-else-if="isLoading" class="text-center">
-      <PulseLoader
-        :loading="isLoading"
-        color="#355E34"
-        :size="`20px`"></PulseLoader>
+      <div
+        class="spinner-border text-success text-bold"
+        role="status"
+        v-if="isLoading">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
     <div v-else>
       <h2 class="mt-3">Whatsapp templates</h2>
@@ -37,7 +39,6 @@
 
 <script setup>
   import { ref, onBeforeMount } from 'vue';
-  import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
   import VDataItem from '@/components/VDataItem.vue';
   import VError from '@/components/VError.vue';
 

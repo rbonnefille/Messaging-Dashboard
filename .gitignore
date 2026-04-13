@@ -4,7 +4,7 @@
 /node_modules
 /server/node_modules
 /client/node_modules
-
+/client/dist/
 # misc
 .DS_Store
 .DS_Store?
@@ -24,3 +24,4 @@ server/package-lock.json
 test.js
 testDestructuring.js
 npm-debug.log*
+/client/dist

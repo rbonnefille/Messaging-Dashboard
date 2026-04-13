@@ -58,7 +58,7 @@
     useShowSuccessToast,
     useGenerateExternalId,
   } from '@/composables/helpers';
-  import { ref, computed, shallowRef } from 'vue';
+  import { ref, computed } from 'vue';
   import { useTitle, useClipboard } from '@vueuse/core';
   import { storeToRefs } from 'pinia';
   import { useLoginUserZDWidget } from '@/composables/useZendesk';
@@ -66,7 +66,7 @@
 
   const userStore = useUserStore();
 
-  const { authenticated } = storeToRefs(userStore);
+  const { authenticated, connectedAs } = storeToRefs(userStore);
   const source = ref(null);
   const { copy, copied, isSupported } = useClipboard({ source });
 
@@ -95,12 +95,6 @@
       type: 'email',
       placeholder: 'jane-doe@example.com',
     },
-    // {
-    //   id: 'emailVerified',
-    //   name: 'Email Verified',
-    //   type: 'checkbox',
-    //   placeholder: '',
-    // },
   ];
 
   const form = ref({
@@ -126,7 +120,7 @@
     useLoginUserSunCoWidget(external_id, token);
     resetForm();
     userStore.changeAuthenticationStatus(true, external_id);
-    useTitle(userStore.titleConnectedAs);
+    useTitle(connectedAs.value);
   };
 
   const resetForm = () => {

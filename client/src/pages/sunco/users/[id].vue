@@ -149,9 +149,7 @@
           data-bs-placement="top"
           title="Devices">
           {{ suncoUserDevices?.length }} Devices
-          <ChevronDownIcon
-            v-if="devicesCollapsed"
-            style="height: 24px; height: 24px" />
+          <ChevronDownIcon v-if="devicesCollapsed" style="height: 24px" />
         </span>
       </h2>
       <div class="row row-cols-3 collapse" id="collapseDevices">
@@ -220,9 +218,7 @@
           data-bs-placement="top"
           title="Conversations">
           {{ conversationsByTime?.length }} Conversations
-          <ChevronDownIcon
-            v-if="conversationsCollapsed"
-            style="height: 24px; height: 24px" />
+          <ChevronDownIcon v-if="conversationsCollapsed" style="height: 24px" />
         </span>
       </h2>
       <VButton

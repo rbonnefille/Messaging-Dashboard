@@ -3,22 +3,58 @@
     <div v-if="errorMessage">
       <VError :errorMessage="errorMessage" />
     </div>
-    <div v-else-if="isLoading" class="text-center">
-      <PulseLoader
-        :loading="isLoading"
-        color="#355E34"
-        :size="`20px`"></PulseLoader>
+    <div v-else-if="isLoading" class="placeholder-glow">
+      <div class="mb-2">
+        <span
+          class="placeholder rounded placeholder-lg col-8"
+          style="height: 5vh"></span>
+      </div>
+      <div class="row align-items-start">
+        <div class="col">
+          <span
+            class="placeholder rounded placeholder-lg col col-12"
+            style="height: 40vh"></span>
+        </div>
+        <div class="col">
+          <span
+            class="placeholder rounded placeholder-lg col col-12"
+            style="height: 40vh"></span>
+        </div>
+        <div class="col">
+          <span
+            class="placeholder rounded placeholder-lg col col-12"
+            style="height: 40vh"></span>
+        </div>
+        <div class="col">
+          <span
+            class="placeholder rounded placeholder-lg col col-12"
+            style="height: 40vh"></span>
+        </div>
+        <div class="mt-2">
+          <span
+            class="placeholder rounded placeholder-lg col-6"
+            style="height: 5vh"></span>
+        </div>
+        <div class="container mt-2">
+          <div
+            class="placeholder rounded placeholder-lg col col-12"
+            style="height: 80vh"></div>
+        </div>
+      </div>
     </div>
     <div v-else>
       <div class="row">
-        <h3 class="h3">
-          Switchboard Integrations
-          <PulseLoader
-            :loading="isLoadingSwitchboardIntegrationUpdate"
-            color="#355E34"
-            :size="`15px`"
-            :style="{ display: 'inline-block' }"></PulseLoader>
-        </h3>
+        <div class="d-flex align-items-center">
+          <h3 class="h3">
+            Switchboard Integrations
+            <div
+              class="spinner-border spinner-border-md text-success"
+              role="status"
+              v-if="isLoadingSwitchboardIntegrationUpdate">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </h3>
+        </div>
         <div
           v-for="sbintegration in switchboardIntegrations"
           :key="sbintegration.id"
@@ -112,14 +148,17 @@
         </div>
       </div>
       <div class="mt-4 row">
-        <h3 class="h3">
-          Switchboards
-          <PulseLoader
-            :loading="isLoadingSwitchboardUpdate"
-            color="#355E34"
-            :size="`15px`"
-            :style="{ display: 'inline-block' }"></PulseLoader>
-        </h3>
+        <div class="d-flex align-items-center">
+          <h3 class="h3">
+            Switchboards
+            <div
+              v-if="isLoadingSwitchboardUpdate"
+              class="spinner-border spinner-border-md text-success"
+              role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </h3>
+        </div>
         <div class="col">
           <div class="card mt-2">
             <div class="card-header bg-body-secondary">Switchboard</div>
@@ -227,8 +266,8 @@
 
 <script setup>
   import { ref, computed, onBeforeMount, watch } from 'vue';
-  import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
   import { integrationIcons } from '@/utils/integrationIcons.js';
+  import VSkeleton from '@/components/VSkeleton.vue';
   import VDataItem from '@/components/VDataItem.vue';
   import VSelect from '@/components/VSelect.vue';
   import VButton from '@/components/VButton.vue';

@@ -6,6 +6,7 @@
       className="form-label" />
     <VInput
       id="searchUser"
+      ref="userEmail"
       v-model="searchUser"
       name="Search User"
       class="mx-3"
@@ -42,19 +43,29 @@
   import VLabel from '@/components/VLabel.vue';
   import VButton from '@/components/VButton.vue';
   import VDataItem from '@/components/VDataItem.vue';
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import {
     useFetchUserIdentity,
     userIdentity,
   } from '@/composables/useSunco.js';
 
   const router = useRouter();
-  const searchUser = ref('');
+  const searchUser = ref(null);
+  const userEmail = ref(null);
+
+  const focusInput = () => {
+    if (userEmail.value) {
+      userEmail.value.focus();
+    }
+  };
 
   const searchUserSunCo = async (e = undefined) => {
     const userEmail = searchUser.value || e.target.value;
     await useFetchUserIdentity(userEmail);
   };
+  onMounted(() => {
+    focusInput();
+  });
 </script>
 
 <route lang="json">

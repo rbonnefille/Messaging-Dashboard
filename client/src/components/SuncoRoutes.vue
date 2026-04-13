@@ -1,11 +1,11 @@
 <template>
-  <h4 class="h4 mt-3">App routes ⤵️</h4>
-  <div class="mb-3 m-0 d-inline-flex list-group">
+  <div class="mb-3 m-0 d-flex justify-content-center list-group">
     <RouterLink
       v-if="authenticated"
       id="getUser"
       target="_blank"
       :to="`/sunco/users/${external_id}`"
+      @click="$emit('close')"
       class="btn routes"
       >Get User data: {{ external_id }}
     </RouterLink>
@@ -13,6 +13,7 @@
       v-for="(route, index) in filteredRoutes"
       :key="index"
       :to="route.to"
+      @click="$emit('close')"
       class="btn routes"
       v-bind="$attrs">
       {{ route.text }}
@@ -25,6 +26,8 @@
   import { storeToRefs } from 'pinia';
   import { suncoRoutes } from '@/router/suncoRoutes';
   import { computed } from 'vue';
+
+  defineEmits(['close']);
 
   const userStore = useUserStore();
   const { authenticated, external_id } = storeToRefs(userStore);

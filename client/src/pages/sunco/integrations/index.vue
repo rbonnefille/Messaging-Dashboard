@@ -3,11 +3,14 @@
     <div v-if="errorMessage">
       <VError :errorMessage="errorMessage" />
     </div>
-    <div v-else-if="isLoading" class="text-center">
-      <PulseLoader
-        :loading="isLoading"
-        color="#355E34"
-        :size="`20px`"></PulseLoader>
+    <div v-else-if="isLoading" class="text-center placeholder-glow">
+      <div class="row align-items-start">
+        <div v-for="n in 20" :key="n" class="col-md-3 mt-3">
+          <span
+            class="placeholder rounded placeholder-lg d-block"
+            style="height: 60vh"></span>
+        </div>
+      </div>
     </div>
     <div v-else>
       <div class="row">
@@ -207,6 +210,24 @@
                   label="includeFullUser"
                   :value="integration.webhooks[0]?.includeFullUser" />
               </template>
+              <template v-if="integration.type === 'twilio'">
+                <VDataItem
+                  :loading="isLoading"
+                  label="name"
+                  :value="integration.name" />
+                <VDataItem
+                  :loading="isLoading"
+                  label="phoneNumber"
+                  :value="integration.phoneNumber" />
+                <VDataItem
+                  :loading="isLoading"
+                  label="accountSid"
+                  :value="integration.accountSid" />
+                <VDataItem
+                  :loading="isLoading"
+                  label="phoneNumberSid"
+                  :value="integration.phoneNumberSid" />
+              </template>
             </ul>
           </div>
         </div>
@@ -217,7 +238,6 @@
 
 <script setup>
   import { onBeforeMount, computed } from 'vue';
-  import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
   import { integrationIcons } from '@/utils/integrationIcons.js';
   import VDataItem from '@/components/VDataItem.vue';
   import VError from '@/components/VError.vue';

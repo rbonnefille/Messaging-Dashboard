@@ -1,39 +1,45 @@
 <template>
-  <div>
-    <div
-      class="offcanvas offcanvas-end"
-      :class="{ show: isOpen }"
-      :style="{ visibility: isOpen ? 'visible' : 'hidden' }"
-      tabindex="-1"
-      id="sidebar-offcanvas"
-      aria-labelledby="sidebarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="sidebarLabel">
-          <slot name="title">Sidebar</slot>
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          @click="closeSidebar"
-          aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <slot>
-          <p>Sidebar content goes here</p>
-        </slot>
-      </div>
+  <div
+    :class="['offcanvas ', `offcanvas-${offcanvasPlacement}`, { show: isOpen }]"
+    :style="{ visibility: isOpen ? 'visible' : 'hidden' }"
+    data-bs-scroll="true"
+    tabindex="-1"
+    id="offcanvasWithBothOptions"
+    aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+        <slot name="title">Sidebar</slot>
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        @click="closeSidebar"
+        aria-label="Close"></button>
     </div>
-
-    <!-- Backdrop -->
-    <div
-      v-if="isOpen"
-      class="offcanvas-backdrop fade show"
-      @click="closeSidebar"></div>
+    <div class="offcanvas-body">
+      <slot>
+        <p>Sidebar content goes here</p>
+      </slot>
+    </div>
   </div>
+
+  <!-- Backdrop -->
+  <div
+    id="test"
+    v-if="isOpen"
+    class="offcanvas-backdrop fade show"
+    @click="closeSidebar"></div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
+
+  defineProps({
+    offcanvasPlacement: {
+      type: String,
+      default: 'end', // 'start', 'end', 'top', 'bottom'
+    },
+  });
 
   const isOpen = ref(false);
 
@@ -74,15 +80,3 @@
     }
   });
 </script>
-
-<style scoped>
-  .offcanvas-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-</style>

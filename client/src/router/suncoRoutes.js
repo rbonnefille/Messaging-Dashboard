@@ -16,6 +16,10 @@ export const suncoRoutes = [
     text: 'Switchboard Configuration',
   },
   {
+    to: '/zendesk/embedded',
+    text: 'Embedded mode Web Widget',
+  },
+  {
     to: '/sunco/snippets/web-widget',
     text: 'Web Widget Snippets',
   },

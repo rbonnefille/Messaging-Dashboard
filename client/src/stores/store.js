@@ -1,55 +1,68 @@
 // userStore.js
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { useLoginUserZDWidget } from '@/composables/useZendesk';
 import { useLoginUserSunCoWidget } from '@/composables/useSunco';
 import { useGetSessionAuth } from '@/composables/helpers';
 
-// export const store = reactive({
-//   authenticated: false,
-//   external_id: undefined,
-//   changeAuthenticationStatus(authenticated, external_id) {
-//     this.authenticated = authenticated
-//     this.external_id = external_id
-//   }
-// })
+export const useUserStore = defineStore('user', () => {
+  const authenticated = ref(false);
+  const external_id = ref(null);
+  const title = ref(null);
+  const sessionStorage = ref(null);
+  const widgetOpened = ref(false);
 
-export const useUserStore = defineStore('user', {
-  state: () => ({
-    authenticated: false,
-    external_id: null,
-    title: null,
-    sessionStorage: null,
-  }),
-  actions: {
-    changeAuthenticationStatus(authenticated, external_id) {
-      this.authenticated = authenticated;
-      this.external_id = external_id;
-    },
-    loginWidgets(widget) {
-      const { token, external_id } = useGetSessionAuth();
-      if (external_id && token) {
-        this.changeAuthenticationStatus(true, external_id);
-        switch (widget) {
-          case 'sunco':
-            useLoginUserSunCoWidget(external_id, token);
-            break;
-          case 'zendesk':
-            useLoginUserZDWidget(token);
-            break;
-          default:
-            useLoginUserSunCoWidget(external_id, token);
-            useLoginUserZDWidget(token);
-            break;
-        }
+  const connectedAs = computed(
+    () => `You are connected as: ${external_id.value}`,
+  );
+  const isWidgetOpened = computed(() => widgetOpened.value);
+
+  function $reset() {
+    authenticated.value = false;
+    external_id.value = null;
+    title.value = null;
+    sessionStorage.value = null;
+    widgetOpened.value = false;
+  }
+  function changeAuthenticationStatus(isAuthenticated, userExternal_id) {
+    authenticated.value = isAuthenticated;
+    external_id.value = userExternal_id;
+    title.value = `User ${userExternal_id}` || null;
+  }
+  function changeWidgetOpenedStatus(status) {
+    widgetOpened.value = status;
+  }
+
+  function loginWidgets(widget) {
+    const { token, external_id: sessionExternalId } = useGetSessionAuth();
+    if (sessionExternalId && token) {
+      changeAuthenticationStatus(true, sessionExternalId);
+      switch (widget) {
+        case 'sunco':
+          useLoginUserSunCoWidget(sessionExternalId, token);
+          break;
+        case 'zendesk':
+          useLoginUserZDWidget(token);
+          break;
+        default:
+          useLoginUserSunCoWidget(sessionExternalId, token);
+          useLoginUserZDWidget(token);
+          break;
       }
-    },
-    getters: {
-      connectedAs: state => {
-        return `You are connected as: ${state.external_id}`;
-      },
-      // titleConnectedAs: (state) => {
-      //   return state.external_id ? `👋 ${state.external_id}` : "Acme Dashboard"
-      // }
-    },
-  },
+    }
+  }
+
+  return {
+    authenticated,
+    external_id,
+    title,
+    sessionStorage,
+    widgetOpened,
+    connectedAs,
+    isWidgetOpened,
+    changeAuthenticationStatus,
+    loginWidgets,
+    changeWidgetOpenedStatus,
+    $reset,
+  };
 });
