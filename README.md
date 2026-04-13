@@ -42,7 +42,7 @@ npm run dev --prefix client
 
 ### Dashboard
 
-![Screenshot 2024-02-06 at 09 00 34](https://github.com/rbonnefille/suncoBackend/assets/60104678/8d191df8-fce4-48c7-80e4-76de723ba2c4)
+<img width="1919" height="943" alt="image" src="https://github.com/user-attachments/assets/3b8357ae-f07c-47b9-90de-488912915d7b" />
 
 ### SunCo integrations list
 
