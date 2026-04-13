@@ -38,7 +38,7 @@ npm run dev --prefix client
 
 ### Main page
 
-![Screenshot 2024-02-06 at 09 00 10](https://github.com/rbonnefille/suncoBackend/assets/60104678/5351e90a-9200-410e-a904-f64770289447)
+<img width="814" height="887" alt="image" src="https://github.com/user-attachments/assets/8dd6207a-97d9-49a2-b8e4-c6c688f99a8a" />
 
 ### Dashboard
 
