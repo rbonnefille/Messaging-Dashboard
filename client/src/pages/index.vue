@@ -3,16 +3,11 @@
     <img src="../assets/zd.svg" alt="Zendesk Logo" />
     <div class="col-lg mx-auto mt-4">
       <h4 class="lead mb-4">
-        🚧 This is a dashboard for SunCo/Messaging. It is a work in progress.
+        🚧 This is a dashboard for SunCo/Messaging. In progress work stuff may not work.
       </h4>
       <div class="d-grid gap-2 flex justify-content-sm-center">
-        <RouterLink
-          v-for="(route, index) in filteredRoutes"
-          :key="index"
-          :to="route.to"
-          :target="route.target"
-          class="btn btn-lg"
-          v-bind="$attrs">
+        <RouterLink v-for="(route, index) in filteredRoutes" :key="index" :to="route.to" :target="route.target"
+          class="btn btn-lg" v-bind="$attrs">
           {{ route.text }}
         </RouterLink>
       </div>
@@ -21,33 +16,31 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue';
-  import { suncoRoutes } from '@/router/suncoRoutes';
+import { computed } from 'vue';
+import { suncoRoutes } from '@/router/suncoRoutes';
 
-  const filteredRoutes = computed(() => {
-    return suncoRoutes.filter(route => route.to !== '/');
-  });
+const filteredRoutes = computed(() => {
+  return suncoRoutes.filter(route => route.to !== '/');
+});
 </script>
 
-<route lang="json">
-{
+<route lang="json">{
   "name": "Home",
   "meta": {
     "layout": "home",
     "title": "Home"
   }
-}
-</route>
+}</route>
 <style lang="css" scoped>
-  a:hover {
-    background-color: #355e34;
-    color: white;
-  }
+a:hover {
+  background-color: #355e34;
+  color: white;
+}
 
-  a {
-    background: #f5f5f2;
-    border: none;
-    color: #16140c;
-    margin-bottom: 1px;
-  }
+a {
+  background: #f5f5f2;
+  border: none;
+  color: #16140c;
+  margin-bottom: 1px;
+}
 </style>
