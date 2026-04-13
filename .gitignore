@@ -4,7 +4,7 @@
 /node_modules
 /server/node_modules
 /client/node_modules
-/client/dist/
+/client/dist
 # misc
 .DS_Store
 .DS_Store?
